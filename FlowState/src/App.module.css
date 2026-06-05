@@ -1,0 +1,107 @@
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+  color:#a4bae8
+}
+
+@media (min-width: 768px) {
+  .container { padding: 32px; }
+}
+
+.header {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+  margin-bottom: 32px;
+}
+
+.appTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0;
+  color:#7ea2ea;
+}
+
+
+.statusLabel {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #475569;
+  margin: 4px 0 0 0;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: start;
+  background-color: white;
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  
+  .timelineSection {
+    grid-column: span 7;
+  }
+  
+  .asideSection {
+    grid-column: span 5;
+    position: sticky;
+    top: 32px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .timelineSection { grid-column: span 8; }
+  .asideSection { grid-column: span 4; }
+}
+.motivationBanner {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  border: 1px solid var(--border-color);
+}
+
+.bannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4; /*  focusing on dimming so text stays readable */
+  filter: grayscale(30%);
+}
+
+.bannerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(2, 15, 71, 0.9), rgba(2, 6, 23, 0.2));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 24px;
+}
+
+.quoteText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #7ea2ea;
+  margin: 0;
+}
+
+.quoteAuthor {
+  font-size: 0.75rem;
+  font-family: monospace;
+  text-transform: uppercase;
+  color: #7aa0ec;
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}

@@ -1,0 +1,13 @@
+{
+  "daily_plans": [
+    {
+      "id": 1,
+      "readinessScore": 84,
+      "schedule": [
+        { "id": 101, "timeSlot": "09:00 AM", "title": "Core Architecture Design", "description": "Draft Spring Boot schema.", "duration": 90, "cognitiveLoad": "deep" },
+        { "id": 102, "timeSlot": "10:30 AM", "title": "Decompress & Hydrate", "description": "Walk around.", "duration": 20, "cognitiveLoad": "rest" }
+      ]
+    }
+  ],
+  "tasks": []
+}

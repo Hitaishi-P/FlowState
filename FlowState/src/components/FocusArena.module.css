@@ -1,0 +1,143 @@
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-h: 400px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.toggleContainer {
+  display: flex;
+  background-color: var(--bg-inner);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleBtnActive {
+  background-color: #1e293b;
+  color: var(--color-deep);
+  font-weight: 600;
+}
+
+.arenaContent {
+  width: 100%;
+  max-width: 320px;
+  margin: auto 0;
+}
+
+.taskTag {
+  font-family: monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-deep);
+  background-color: var(--bg-deep);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.countdown {
+  font-family: monospace;
+  font-size: 4.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  margin: 24px 0;
+  user-select: none;
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.btn {
+  width: 112px;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.btnPrimary {
+  background-color: #9333ea;
+  color: #ffffff;
+  border: none;
+}
+
+.btnPrimary:hover {
+  background-color: #a855f7;
+}
+
+.btnSecondary {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.btnSecondary:hover {
+  background-color: rgba(245, 158, 11, 0.2);
+}
+
+.btnOutline {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.btnOutline:hover {
+  background-color: #1e293b;
+  color: var(--text-main);
+}
+
+.emptyState {
+  margin: auto 0;
+  color: var(--text-muted);
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}

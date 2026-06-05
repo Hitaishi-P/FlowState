@@ -1,0 +1,25 @@
+:root {
+  --bg-main: #020617;
+  --bg-card: #0f172a;
+  --bg-inner: #020617;
+  --border-color: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --color-deep: #a855f7;
+  --bg-deep: rgba(147, 51, 234, 0.15);
+  --color-medium: #3b82f6;
+  --bg-medium: rgba(59, 130, 246, 0.15);
+  --color-low: #64748b;
+  --bg-low: rgba(100, 116, 139, 0.15);
+  --color-rest: #10b981;
+  --bg-rest: rgba(16, 185, 129, 0.15);
+}
+
+body {
+  margin: 0;
+  background-color: white;
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

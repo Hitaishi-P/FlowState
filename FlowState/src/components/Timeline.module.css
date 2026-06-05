@@ -1,0 +1,149 @@
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 25px -5px rgba(255,255,255,1);
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.badge {
+  font-size: 0.75rem;
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-rest);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.timelineTree {
+  position: relative;
+  border-left: 1px solid var(--border-color);
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.itemWrapper {
+  position: relative;
+  padding-left: 32px;
+}
+
+.node {
+  position: absolute;
+  left: -6.5px;
+  top: 22px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-low);
+  background-color: var(--bg-main);
+  transition: all 0.2s ease;
+}
+
+.nodeActive {
+  border-color: var(--color-deep);
+  transform: scale(1.25);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+.taskBox {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
+  background: #496dae;   /* light blue */
+  color: white;          /* white text */
+}
+
+.taskBox:hover {
+  border-color: #334155;
+}
+
+.taskBoxActive {
+  border-color: var(--color-deep);
+  box-shadow: inset 0 0 4px rgba(168, 85, 247, 0.1);
+}
+
+/* Cognitive Load Modifier Classes */
+.deep {
+  border-color: #3A7AFE; /* soft blue */
+  box-shadow: 0 0 8px rgba(58, 122, 254, 0.25);
+}
+.medium {
+  border-color: #3CC7A6; /* mint */
+  box-shadow: 0 0 8px rgba(60, 199, 166, 0.25);
+}
+.low {
+  border-color: #A0AEC0; /* cool gray */
+  box-shadow: 0 0 8px rgba(160, 174, 192, 0.25);
+}
+.rest {
+  border-color: #A8F0D6; /* pale mint */
+  box-shadow: 0 0 8px rgba(168, 240, 214, 0.25);
+  cursor: default;
+}
+
+
+
+.timeSlot {
+  font-family: monospace;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.taskTitle {
+  font-weight: 600;
+  margin: 0;
+}
+
+.taskDesc {
+  font-size: 0.875rem;
+  opacity: 0.7;
+  margin: 4px 0 0 0;
+}
+
+.metaRight {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.loadLabel {
+  font-family: monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.duration {
+  font-family: monospace;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
