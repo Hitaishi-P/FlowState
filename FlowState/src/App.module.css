@@ -35,7 +35,6 @@
   grid-template-columns: 1fr;
   gap: 32px;
   align-items: start;
-  background-color: white;
 }
 
 @media (min-width: 1024px) {
