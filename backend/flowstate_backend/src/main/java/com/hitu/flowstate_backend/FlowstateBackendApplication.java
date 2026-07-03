@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FlowstateBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FlowstateBackendApplication.class, args);
+        SpringApplication.run(FlowstateBackendApplication.class, args); // <- was BiometricPlannerApplication
     }
 
 }
