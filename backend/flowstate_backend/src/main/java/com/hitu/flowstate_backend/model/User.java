@@ -1,9 +1,9 @@
 package com.hitu.flowstate_backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+//import lombok.Getter;
+//import lombok.NoArgsConstructor;
+//import lombok.Setter;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -14,9 +14,9 @@ import java.util.List;
 // class below looks so short compared to plain Java.
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
+//@Getter
+//@Setter
+//@NoArgsConstructor
 public class User {
 
     @Id

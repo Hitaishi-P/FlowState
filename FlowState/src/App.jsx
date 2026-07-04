@@ -17,8 +17,8 @@ export default function App() {
   return (
     <div className={styles.container}>{/* ... */}
       <header className={styles.header}>
-        <h1 className={styles.appTitle}>Biometric Planner</h1>{/* header */}
-        <p className={styles.statusLabel}>placeholder</p>
+        <h1 className={styles.appTitle}>Flowstate</h1>{/* header */}
+        <p className={styles.statusLabel}>Biometric Planner</p>
       </header>
 
         {/* Motivational Image Banner Section */}

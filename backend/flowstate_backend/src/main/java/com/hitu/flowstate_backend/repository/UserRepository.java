@@ -1,6 +1,6 @@
 package com.hitu.flowstate_backend.repository;
 
-import com.yourpackage.model.User;
+import com.hitu.flowstate_backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
