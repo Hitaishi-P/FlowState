@@ -24,13 +24,13 @@ export default function App() {
         {/* Motivational Image Banner Section */}
       <div className={styles.motivationBanner}>
         <img 
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" 
+          src="HeaderPic.png" 
           alt="Motivation Background" 
           className={styles.bannerImg}
         />
         <div className={styles.bannerOverlay}>
-          <p className={styles.quoteText}>"Success at anything will always come down to this: Focus and Effort. And we control both"</p>
-          <span className={styles.quoteAuthor}>- Dwayne Johnson</span>
+          <p className={styles.quoteText}>"It always seems impossible Until it's done"</p>
+          <span className={styles.quoteAuthor}>- Nelson Mandela </span>
         </div>
       </div>
 

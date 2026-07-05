@@ -12,13 +12,13 @@
   --bg-medium: rgba(59, 130, 246, 0.15);
   --color-low: #64748b;
   --bg-low: rgba(100, 116, 139, 0.15);
-  --color-rest: #10b981;
+  --color-rest: #d4dad8;
   --bg-rest: rgba(16, 185, 129, 0.15);
 }
 
 body {
   margin: 0;
-  background-color: white;
+  background-color:  #a2cae8;
   color: var(--text-main);
   font-family: system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;

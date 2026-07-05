@@ -2,7 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 16px;
-  color:#a4bae8
+  color: #BFEFFF; 
 }
 
 @media (min-width: 768px) {
@@ -19,7 +19,7 @@
   font-size: 3rem;
   font-weight: 900;
   margin: 0;
-  color:#7ea2ea;
+  color:#141157;
 }
 
 
@@ -71,7 +71,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.4; /*  focuses on dimming so text stays readable */
+  object-position: center 90%;
+  opacity: 1; /*  focuses on dimming so text stays readable */
   filter: grayscale(30%);
 }
 
@@ -81,7 +82,6 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to right, rgba(2, 15, 71, 0.9), rgba(2, 6, 23, 0.2));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,10 +89,10 @@
 }
 
 .quoteText {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   font-style: italic;
-  color: #7ea2ea;
+  color: #141157;
   margin: 0;
 }
 
@@ -100,7 +100,7 @@
   font-size: 0.75rem;
   font-family: monospace;
   text-transform: uppercase;
-  color: #7aa0ec;
+  color: #000000;
   margin-top: 4px;
   letter-spacing: 0.1em;
 }
