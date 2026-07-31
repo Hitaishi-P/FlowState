@@ -14,7 +14,8 @@ export default function FocusArena() {
   }, [timerMode]);
 
   return (
-    <div className={styles.card}>
+<div className={styles.page}>
+<div className={styles.card}>
       <div className={styles.header}>
         <h2 className={styles.title}>Focus Arena</h2>
         <div className={styles.toggleContainer}>
@@ -67,6 +68,7 @@ export default function FocusArena() {
           </p>
         </div>
       )}
+    </div>
     </div>
   );
 }

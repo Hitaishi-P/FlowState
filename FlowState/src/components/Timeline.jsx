@@ -8,7 +8,8 @@ export default function Timeline({ dailyPlan, onRefresh }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className={styles.card}>
+    <div className={styles.page}>
+        <div className={styles.card}>
       <div className={styles.header}>
         <h2 className={styles.title}>Today's Optimized Schedule</h2>
         <span className={styles.badge}>Readiness: {dailyPlan.readinessScore}/100</span>
@@ -41,6 +42,7 @@ export default function Timeline({ dailyPlan, onRefresh }) {
             </div>
           );
         })}
+      </div>
       </div>
 
       {/* Button fixed perfectly to the bottom right corner of the card container */}

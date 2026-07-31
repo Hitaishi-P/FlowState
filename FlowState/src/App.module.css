@@ -8,6 +8,14 @@
 @media (min-width: 768px) {
   .container { padding: 32px; }
 }
+.appContainer{
+    min-height:100vh;
+    background:#0b0b0b;
+}
+
+.pageContainer{
+    padding-bottom:90px;
+}
 
 
 .header {
