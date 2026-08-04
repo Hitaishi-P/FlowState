@@ -35,29 +35,29 @@ export default function FocusArena() {
       </div>
 
       {activeTask ? (
-        <div className={styles.arenaContent}>
-          <div>
-            <span className={styles.taskTag}>Loop: {activeTask.title}</span>
-          </div>
+  <div className={styles.arenaContent}>
+    <div>
+      <span className={styles.taskTag}>Loop: {activeTask.title}</span>
+    </div>
 
-          <div className={styles.countdown}>{formatTime()}</div>
+    <div className={styles.countdown}>{formatTime()}</div>
 
-          <div className={styles.btnGroup}>
-            {isTimerRunning ? (
-              <button onClick={pauseTimer} className={`${styles.btn} ${styles.btnSecondary}`}>
-                Pause
-              </button>
-            ) : (
-              <button onClick={startTimer} className={`${styles.btn} ${styles.btnPrimary}`}>
-                Focus
-              </button>
-            )}
-            <button onClick={() => resetTimer(defaultMinutes)} className={`${styles.btn} ${styles.btnOutline}`}>
-              Reset
-            </button>
-          </div>
-        </div>
+    <div className={styles.btnGroup}>
+      {isTimerRunning ? (
+        <button onClick={pauseTimer} className={`${styles.btn} ${styles.btnSecondary}`}>
+          Pause
+        </button>
       ) : (
+        <button onClick={startTimer} className={`${styles.btn} ${styles.btnPrimary}`}>
+          Focus
+        </button>
+      )}
+      <button onClick={() => resetTimer(defaultMinutes)} className={`${styles.btn} ${styles.btnOutline}`}>
+        Reset
+      </button>
+    </div>
+  </div>
+) : (
         <div className={styles.emptyState}>
           <svg className={styles.emptyIcon} viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" />

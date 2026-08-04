@@ -145,3 +145,116 @@
   fill: none;
   stroke-width: 1.5;
 }
+.page {
+  padding: 18px;
+  padding-bottom: 100px;
+}
+
+.card {
+  background: var(--bg-card, #0f172a);
+  border: 1px solid var(--border-color, #1e293b);
+  border-radius: 12px;
+  padding: 24px;
+  color: var(--text-main, #f8fafc);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.toggleContainer {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-inner, #020617);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.toggleBtnActive {
+  background: var(--color-deep, #a855f7);
+  color: white;
+}
+
+.arenaContent {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.taskTag {
+  font-size: 0.85rem;
+  color: var(--text-muted, #94a3b8);
+}
+
+.countdown {
+  font-size: 4rem;
+  font-weight: 800;
+  font-family: monospace;
+  margin: 24px 0;
+}
+
+.btnGroup {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.btnPrimary {
+  background: var(--color-deep, #a855f7);
+  color: white;
+}
+
+.btnSecondary {
+  background: var(--color-medium, #3b82f6);
+  color: white;
+}
+
+.btnOutline {
+  background: transparent;
+  border: 1px solid var(--border-color, #1e293b);
+  color: var(--text-main, #f8fafc);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted, #94a3b8);
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  margin: 0 auto 16px;
+  display: block;
+}
