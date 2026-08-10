@@ -1,51 +1,56 @@
-import React, { useState } from "react";
+```jsx
+import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
-
-const mockDailyPlan = {
-  readinessScore: 84,
-  schedule: [
-    {
-      id: 1,
-      timeSlot: "09:00 AM",
-      title: "Core Architecture Design",
-      description: "Draft Spring Boot schema and workflow orchestration gates.",
-      duration: 90,
-      cognitiveLoad: "deep",
-    },
-    {
-      id: 2,
-      timeSlot: "10:30 AM",
-      title: "Recovery Break",
-      description: "Walk, hydrate, recharge.",
-      duration: 20,
-      cognitiveLoad: "rest",
-    },
-    {
-      id: 3,
-      timeSlot: "10:50 AM",
-      title: "React UI Integration",
-      description: "Wire Zustand store and routing.",
-      duration: 90,
-      cognitiveLoad: "deep",
-    },
-    {
-      id: 4,
-      timeSlot: "12:20 PM",
-      title: "Inbox Review",
-      description: "Low-load admin work.",
-      duration: 30,
-      cognitiveLoad: "low",
-    },
-  ],
-};
+import { getDailyPlans } from "../services/dataApi";
 
 export default function TodoPage() {
-  const [, setRefresh] = useState(false);
+  const [dailyPlan, setDailyPlan] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadTodayPlan = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const plans = await getDailyPlans();
+
+      // Get today's date in YYYY-MM-DD format.
+      const today = new Date().toISOString().slice(0, 10);
+
+      const todayPlan = plans.find(
+        (plan) => plan.date === today
+      );
+
+      setDailyPlan(todayPlan || null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadTodayPlan();
+  }, []);
+
+  if (loading) {
+    return <div>Loading today's plan...</div>;
+  }
+
+  if (error) {
+    return <div>Couldn't load today's plan: {error}</div>;
+  }
+
+  if (!dailyPlan) {
+    return <div>No plan scheduled for today.</div>;
+  }
 
   return (
     <Timeline
-      dailyPlan={mockDailyPlan}
-      onRefresh={() => setRefresh((prev) => !prev)}
+      dailyPlan={dailyPlan}
+      onRefresh={loadTodayPlan}
     />
   );
 }
+```
