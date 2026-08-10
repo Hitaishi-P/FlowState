@@ -1,17 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useAppStore } from "../store/useAppStore";
+import { getDailyPlans } from "../services/dataApi";
 import styles from "./CalendarView.module.css";
-
-// Mock data until this is wired to a real schedule/db source
-const mockMonthTasks = {
-  "2026-08-03": [{ title: "Core Architecture Design", cognitiveLoad: "deep" }],
-  "2026-08-04": [
-    { title: "React UI Integration", cognitiveLoad: "deep" },
-    { title: "Inbox Review", cognitiveLoad: "low" },
-  ],
-  "2026-08-06": [{ title: "Recovery Break", cognitiveLoad: "rest" }],
-  "2026-08-10": [{ title: "Client Sync", cognitiveLoad: "medium" }],
-};
 
 function getMonthGrid(year, month) {
   const firstDay = new Date(year, month, 1);
@@ -35,6 +25,31 @@ export default function CalendarView() {
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedKey, setSelectedKey] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    getDailyPlans()
+      .then((data) => { if (!cancelled) setPlans(data); })
+      .catch((err) => { if (!cancelled) setError(err.message); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const monthTasks = useMemo(() => {
+    const map = {};
+    plans.forEach((plan) => {
+      if (!plan.date) return;
+      map[plan.date] = (plan.schedule || []).map((s) => ({
+        title: s.title,
+        cognitiveLoad: s.cognitiveLoad,
+      }));
+    });
+    return map;
+  }, [plans]);
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -44,7 +59,10 @@ export default function CalendarView() {
   const goPrevMonth = () => setViewDate(new Date(year, month - 1, 1));
   const goNextMonth = () => setViewDate(new Date(year, month + 1, 1));
 
-  const selectedTasks = selectedKey ? mockMonthTasks[selectedKey] || [] : [];
+  const selectedTasks = selectedKey ? monthTasks[selectedKey] || [] : [];
+
+  if (loading) return <div className={styles.page}>Loading calendar…</div>;
+  if (error) return <div className={styles.page}>Couldn't load calendar: {error}</div>;
 
   return (
     <div className={styles.page}>
@@ -66,7 +84,7 @@ export default function CalendarView() {
             if (day === null) return <div key={i} className={styles.emptyCell} />;
 
             const key = formatKey(year, month, day);
-            const dayTasks = mockMonthTasks[key] || [];
+            const dayTasks = monthTasks[key] || [];
             const isToday =
               day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
             const isSelected = key === selectedKey;
@@ -86,7 +104,7 @@ export default function CalendarView() {
               </button>
             );
           })}
-        </div># 
+        </div>
       </div>
 
       {selectedKey && (

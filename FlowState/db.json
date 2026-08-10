@@ -2,12 +2,44 @@
   "daily_plans": [
     {
       "id": 1,
+      "date": "2026-08-10",
       "readinessScore": 84,
       "schedule": [
         { "id": 101, "timeSlot": "09:00 AM", "title": "Core Architecture Design", "description": "Draft Spring Boot schema.", "duration": 90, "cognitiveLoad": "deep" },
         { "id": 102, "timeSlot": "10:30 AM", "title": "Decompress & Hydrate", "description": "Walk around.", "duration": 20, "cognitiveLoad": "rest" }
       ]
+    },
+    {
+      "id": 2,
+      "date": "2026-08-03",
+      "readinessScore": 76,
+      "schedule": [
+        { "id": 201, "timeSlot": "09:00 AM", "title": "Core Architecture Design", "description": "", "duration": 90, "cognitiveLoad": "deep" }
+      ]
+    },
+    {
+      "id": 3,
+      "date": "2026-08-04",
+      "readinessScore": 80,
+      "schedule": [
+        { "id": 301, "timeSlot": "09:00 AM", "title": "React UI Integration", "description": "", "duration": 90, "cognitiveLoad": "deep" },
+        { "id": 302, "timeSlot": "02:00 PM", "title": "Inbox Review", "description": "", "duration": 20, "cognitiveLoad": "low" }
+      ]
+    },
+    {
+      "id": 4,
+      "date": "2026-08-06",
+      "readinessScore": 60,
+      "schedule": [
+        { "id": 401, "timeSlot": "10:00 AM", "title": "Recovery Break", "description": "", "duration": 30, "cognitiveLoad": "rest" }
+      ]
     }
+  ],
+  "sessions": [
+    { "id": 1, "taskTitle": "Core Architecture Design", "cognitiveLoad": "deep", "durationMinutes": 90, "completedAt": "2026-08-03T11:30:00" },
+    { "id": 2, "taskTitle": "React UI Integration", "cognitiveLoad": "deep", "durationMinutes": 95, "completedAt": "2026-08-04T12:15:00" },
+    { "id": 3, "taskTitle": "Inbox Review", "cognitiveLoad": "low", "durationMinutes": 20, "completedAt": "2026-08-04T15:00:00" },
+    { "id": 4, "taskTitle": "Recovery Break", "cognitiveLoad": "rest", "durationMinutes": 25, "completedAt": "2026-08-06T10:20:00" }
   ],
   "tasks": []
 }

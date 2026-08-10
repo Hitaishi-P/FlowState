@@ -1,40 +1,75 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { getSessions } from "../services/dataApi";
 import styles from "./StatsView.module.css";
 
-// Mock data until this is wired to real task history (e.g. from db.json)
-const mockWeekStats = {
-  totalFocusMinutes: 645,
-  tasksCompleted: 18,
-  currentStreak: 4,
-  loadBreakdown: [
-    { label: "Deep", key: "deep", minutes: 320 },
-    { label: "Medium", key: "medium", minutes: 180 },
-    { label: "Low", key: "low", minutes: 85 },
-    { label: "Rest", key: "rest", minutes: 60 },
-  ],
-  dailyMinutes: [
-    { day: "Mon", minutes: 95 },
-    { day: "Tue", minutes: 120 },
-    { day: "Wed", minutes: 60 },
-    { day: "Thu", minutes: 140 },
-    { day: "Fri", minutes: 90 },
-    { day: "Sat", minutes: 40 },
-    { day: "Sun", minutes: 100 },
-  ],
-};
+const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const LOAD_LABELS = { deep: "Deep", medium: "Medium", low: "Low", rest: "Rest" };
 
 export default function StatsView() {
-  const { totalFocusMinutes, tasksCompleted, currentStreak, loadBreakdown, dailyMinutes } =
-    mockWeekStats;
+  const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const totalLoadMinutes = loadBreakdown.reduce((sum, l) => sum + l.minutes, 0);
-  const maxDayMinutes = Math.max(...dailyMinutes.map((d) => d.minutes));
+  useEffect(() => {
+    let cancelled = false;
+    getSessions()
+      .then((data) => { if (!cancelled) setSessions(data); })
+      .catch((err) => { if (!cancelled) setError(err.message); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const stats = useMemo(() => {
+    const totalFocusMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+    const tasksCompleted = sessions.length;
+
+    const loadMap = {};
+    sessions.forEach((s) => {
+      loadMap[s.cognitiveLoad] = (loadMap[s.cognitiveLoad] || 0) + s.durationMinutes;
+    });
+    const loadBreakdown = Object.entries(loadMap).map(([key, minutes]) => ({
+      key,
+      minutes,
+      label: LOAD_LABELS[key] || key,
+    }));
+
+    const today = new Date();
+    const dailyMinutes = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const minutes = sessions
+        .filter((s) => s.completedAt?.slice(0, 10) === key)
+        .reduce((sum, s) => sum + s.durationMinutes, 0);
+      dailyMinutes.push({ day: DAY_LABELS[d.getDay()], minutes });
+    }
+
+    let currentStreak = 0;
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const hasSession = sessions.some((s) => s.completedAt?.slice(0, 10) === key);
+      if (hasSession) currentStreak++;
+      else break;
+    }
+
+    return { totalFocusMinutes, tasksCompleted, currentStreak, loadBreakdown, dailyMinutes };
+  }, [sessions]);
+
+  const { totalFocusMinutes, tasksCompleted, currentStreak, loadBreakdown, dailyMinutes } = stats;
+  const totalLoadMinutes = loadBreakdown.reduce((sum, l) => sum + l.minutes, 0) || 1;
+  const maxDayMinutes = Math.max(1, ...dailyMinutes.map((d) => d.minutes));
 
   const formatHours = (mins) => {
     const h = Math.floor(mins / 60);
     const m = mins % 60;
     return h > 0 ? `${h}h ${m}m` : `${m}m`;
   };
+
+  if (loading) return <div className={styles.page}>Loading stats…</div>;
+  if (error) return <div className={styles.page}>Couldn't load stats: {error}</div>;
 
   return (
     <div className={styles.page}>
@@ -59,10 +94,7 @@ export default function StatsView() {
           {dailyMinutes.map((d, i) => (
             <div key={i} className={styles.barCol}>
               <div className={styles.barTrack}>
-                <div
-                  className={styles.bar}
-                  style={{ height: `${(d.minutes / maxDayMinutes) * 100}%` }}
-                />
+                <div className={styles.bar} style={{ height: `${(d.minutes / maxDayMinutes) * 100}%` }} />
               </div>
               <span className={styles.barLabel}>{d.day}</span>
             </div>
@@ -74,11 +106,7 @@ export default function StatsView() {
         <h3 className={styles.cardTitle}>Cognitive Load Distribution</h3>
         <div className={styles.loadStack}>
           {loadBreakdown.map((l, i) => (
-            <div
-              key={i}
-              className={`${styles.loadSegment} ${styles[l.key]}`}
-              style={{ width: `${(l.minutes / totalLoadMinutes) * 100}%` }}
-            />
+            <div key={i} className={`${styles.loadSegment} ${styles[l.key]}`} style={{ width: `${(l.minutes / totalLoadMinutes) * 100}%` }} />
           ))}
         </div>
         <div className={styles.loadLegend}>
