@@ -1,166 +1,242 @@
 ```javascript
-// src/services/scheduleEngine.js
+// src/services/healthDataApi.js
 
-const LOAD_ORDER = {
-  deep: 4,
-  medium: 3,
-  low: 2,
-  rest: 1,
+/**
+ * Flowstate health/readiness data adapter.
+ *
+ * This file intentionally does NOT connect directly to Apple Health,
+ * Google Health Connect, Fitbit, Garmin, etc. Browser-based React apps
+ * generally need a native app or backend integration for those platforms.
+ *
+ * Instead, the rest of Flowstate talks to this normalized interface.
+ */
+
+const DEFAULT_READINESS = {
+  score: 84,
+  sleepHours: 7.5,
+  sleepQuality: "good",
+  recoveryScore: 82,
+  restingHeartRate: null,
+  hrv: null,
+  source: "mock",
 };
 
-const READINESS_RULES = [
-  {
-    min: 80,
-    allowedLoads: ["deep", "medium", "low", "rest"],
-    maxDeepMinutes: 180,
-  },
-  {
-    min: 60,
-    allowedLoads: ["medium", "low", "rest"],
-    maxDeepMinutes: 90,
-  },
-  {
-    min: 0,
-    allowedLoads: ["low", "rest"],
-    maxDeepMinutes: 0,
-  },
-];
-
-function getReadinessRule(readinessScore = 0) {
-  return (
-    READINESS_RULES.find((rule) => readinessScore >= rule.min) ||
-    READINESS_RULES[READINESS_RULES.length - 1]
-  );
-}
-
 /**
- * Sort tasks so higher cognitive-load tasks are considered first.
- * Within the same load, preserve the original order.
- */
-function sortByCognitiveLoad(tasks) {
-  return [...tasks].sort(
-    (a, b) =>
-      (LOAD_ORDER[b.cognitiveLoad] || 0) -
-      (LOAD_ORDER[a.cognitiveLoad] || 0)
-  );
-}
-
-/**
- * Returns true if a task is compatible with the user's readiness.
- */
-export function isTaskAllowed(task, readinessScore) {
-  const rule = getReadinessRule(readinessScore);
-  return rule.allowedLoads.includes(task.cognitiveLoad);
-}
-
-/**
- * Calculate how many minutes of deep work are already scheduled.
- */
-export function getDeepWorkMinutes(tasks = []) {
-  return tasks
-    .filter((task) => task.cognitiveLoad === "deep")
-    .reduce((sum, task) => sum + (Number(task.duration) || 0), 0);
-}
-
-/**
- * Creates a cognitive-load-aware schedule.
+ * Return the latest readiness data.
  *
- * This does not modify the original task array.
- *
- * @param {Object} options
- * @param {Array} options.tasks
- * @param {number} options.readinessScore
- * @returns {Array} scheduled tasks
+ * Currently returns mock data.
+ * Replace the implementation later with a real provider.
  */
-export function buildSchedule({
-  tasks = [],
-  readinessScore = 0,
+export async function getReadiness() {
+  return {
+    ...DEFAULT_READINESS,
+    measuredAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Return health data for a particular date.
+ *
+ * Date should be YYYY-MM-DD.
+ */
+export async function getReadinessForDate(date) {
+  // Placeholder until a real health provider is connected.
+  return {
+    ...DEFAULT_READINESS,
+    date,
+    measuredAt: `${date}T08:00:00`,
+  };
+}
+
+/**
+ * Convert raw health metrics into Flowstate's 0–100 readiness score.
+ *
+ * Each metric is optional. Missing metrics simply don't contribute.
+ */
+export function calculateReadinessScore({
+  sleepHours,
+  sleepQuality,
+  recoveryScore,
+  restingHeartRate,
+  baselineRestingHeartRate,
+  hrv,
+  baselineHrv,
 } = {}) {
-  const rule = getReadinessRule(readinessScore);
-  const sortedTasks = sortByCognitiveLoad(tasks);
+  const scores = [];
+  const weights = [];
 
-  let deepMinutes = 0;
+  // Sleep duration
+  if (typeof sleepHours === "number") {
+    let sleepScore;
 
-  return sortedTasks
-    .filter((task) => isTaskAllowed(task, readinessScore))
-    .map((task) => {
-      const duration = Number(task.duration) || 0;
-
-      if (task.cognitiveLoad === "deep") {
-        if (deepMinutes >= rule.maxDeepMinutes) {
-          return null;
-        }
-
-        const remainingDeepMinutes = rule.maxDeepMinutes - deepMinutes;
-
-        if (duration > remainingDeepMinutes) {
-          return {
-            ...task,
-            duration: remainingDeepMinutes,
-          };
-        }
-
-        deepMinutes += duration;
-      }
-
-      return {
-        ...task,
-        duration,
-      };
-    })
-    .filter(Boolean);
-}
-
-/**
- * Summarize the cognitive load of a schedule.
- */
-export function summarizeLoad(tasks = []) {
-  return tasks.reduce(
-    (summary, task) => {
-      const load = task.cognitiveLoad;
-
-      if (summary[load] !== undefined) {
-        summary[load] += Number(task.duration) || 0;
-      }
-
-      summary.totalMinutes += Number(task.duration) || 0;
-
-      return summary;
-    },
-    {
-      deep: 0,
-      medium: 0,
-      low: 0,
-      rest: 0,
-      totalMinutes: 0,
+    if (sleepHours >= 7 && sleepHours <= 9) {
+      sleepScore = 100;
+    } else if (sleepHours >= 6) {
+      sleepScore = 80;
+    } else if (sleepHours >= 5) {
+      sleepScore = 60;
+    } else {
+      sleepScore = 40;
     }
+
+    scores.push(sleepScore);
+    weights.push(0.35);
+  }
+
+  // Sleep quality
+  if (sleepQuality) {
+    const qualityScores = {
+      excellent: 100,
+      good: 85,
+      fair: 65,
+      poor: 40,
+    };
+
+    if (qualityScores[sleepQuality] !== undefined) {
+      scores.push(qualityScores[sleepQuality]);
+      weights.push(0.15);
+    }
+  }
+
+  // Provider recovery score
+  if (typeof recoveryScore === "number") {
+    scores.push(clamp(recoveryScore, 0, 100));
+    weights.push(0.3);
+  }
+
+  // Resting heart rate relative to personal baseline
+  if (
+    typeof restingHeartRate === "number" &&
+    typeof baselineRestingHeartRate === "number" &&
+    baselineRestingHeartRate > 0
+  ) {
+    const difference =
+      restingHeartRate - baselineRestingHeartRate;
+
+    let heartRateScore;
+
+    if (difference <= 0) {
+      heartRateScore = 100;
+    } else if (difference <= 3) {
+      heartRateScore = 90;
+    } else if (difference <= 6) {
+      heartRateScore = 75;
+    } else if (difference <= 10) {
+      heartRateScore = 55;
+    } else {
+      heartRateScore = 35;
+    }
+
+    scores.push(heartRateScore);
+    weights.push(0.1);
+  }
+
+  // HRV relative to personal baseline
+  if (
+    typeof hrv === "number" &&
+    typeof baselineHrv === "number" &&
+    baselineHrv > 0
+  ) {
+    const ratio = hrv / baselineHrv;
+
+    let hrvScore;
+
+    if (ratio >= 1) {
+      hrvScore = 100;
+    } else if (ratio >= 0.9) {
+      hrvScore = 90;
+    } else if (ratio >= 0.8) {
+      hrvScore = 75;
+    } else if (ratio >= 0.7) {
+      hrvScore = 60;
+    } else {
+      hrvScore = 40;
+    }
+
+    scores.push(hrvScore);
+    weights.push(0.1);
+  }
+
+  if (scores.length === 0) {
+    return null;
+  }
+
+  /*
+   * Normalize the weights because some metrics may be unavailable.
+   */
+  const totalWeight = weights.reduce(
+    (sum, weight) => sum + weight,
+    0
   );
+
+  const weightedScore = scores.reduce(
+    (sum, score, index) =>
+      sum + score * weights[index],
+    0
+  );
+
+  return Math.round(weightedScore / totalWeight);
 }
 
 /**
- * Generate a simple readiness summary for the UI.
+ * Convert a readiness score into a category useful to the UI.
  */
-export function getReadinessSummary(readinessScore = 0) {
-  if (readinessScore >= 80) {
+export function getReadinessLevel(score) {
+  if (score >= 80) {
+    return "high";
+  }
+
+  if (score >= 60) {
+    return "moderate";
+  }
+
+  if (score >= 40) {
+    return "low";
+  }
+
+  return "very-low";
+}
+
+/**
+ * Convert readiness into a simple scheduling recommendation.
+ */
+export function getReadinessRecommendation(score) {
+  if (score >= 80) {
     return {
       level: "high",
-      label: "High readiness",
-      message: "Good conditions for deep, demanding work.",
+      label: "Ready for deep work",
+      description:
+        "Good conditions for demanding cognitive work.",
     };
   }
 
-  if (readinessScore >= 60) {
+  if (score >= 60) {
     return {
       level: "moderate",
-      label: "Moderate readiness",
-      message: "Balance focused work with lighter tasks and recovery.",
+      label: "Balance your workload",
+      description:
+        "Use focused blocks, but mix in lighter work and recovery.",
+    };
+  }
+
+  if (score >= 40) {
+    return {
+      level: "low",
+      label: "Protect your energy",
+      description:
+        "Prioritize lighter tasks and shorter focus blocks.",
     };
   }
 
   return {
-    level: "low",
-    label: "Low readiness",
-    message: "Prioritize lighter work and recovery today.",
+    level: "very-low",
+    label: "Recovery day",
+    description:
+      "Favor recovery and low-demand tasks today.",
   };
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
 }
 ```
