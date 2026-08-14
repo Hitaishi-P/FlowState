@@ -1,4 +1,4 @@
-```javascript
+
 // src/services/planService.js
 
 import { getAllAssignments, normalizeCanvasAssignments } from "./canvasApi";

@@ -1,4 +1,4 @@
-```jsx
+
 import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
 import { getDailyPlans } from "../services/dataApi";
@@ -53,4 +53,4 @@ export default function TodoPage() {
     />
   );
 }
-```
+
