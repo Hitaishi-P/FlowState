@@ -176,8 +176,3 @@ Your `TaskForm.jsx` currently POSTs to `http://localhost:8080/tasks` — looks l
 6. **Polish** — animations, empty states, refine the adjustment algorithm with real usage data
 
 ---
-
-## Open Questions for You
-- Do you want Canvas auth via a personal access token (quick, per-student setup) or full OAuth (needed if this becomes a shared/public app)?
-- For health data — manual daily check-in form, or do you want to hook up a wearable API (Apple Health, Fitbit, Oura) later?
-- Should the Calendar page be read-only (view deadlines) or also let users drag tasks to reschedule?
